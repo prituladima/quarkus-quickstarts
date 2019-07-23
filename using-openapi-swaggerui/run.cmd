@@ -1,0 +1,1 @@
+mvnw.cmd clean test compile quarkus:dev:
