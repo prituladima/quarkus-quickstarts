@@ -8,15 +8,17 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 @Entity
 @Cacheable
-public class Fruit extends PanacheEntity {
-
+public class AccountHolder  extends PanacheEntity {
     @Column(length = 40, unique = true)
     public String name;
+    @Column
+    public int balance;
 
-    public Fruit() {
+    public AccountHolder() {
     }
 
-    public Fruit(String name) {
+    public AccountHolder(String name, int balance) {
         this.name = name;
+        this.balance = balance;
     }
 }

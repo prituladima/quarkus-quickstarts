@@ -1,51 +1,42 @@
 package org.acme.hibernate.orm.panache;
 
-import java.util.List;
+import io.quarkus.panache.common.Sort;
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.json.Json;
 import javax.transaction.Transactional;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
+import java.util.List;
 
-import org.jboss.resteasy.annotations.jaxrs.PathParam;
-
-import io.quarkus.panache.common.Sort;
-
-@Path("fruits")
+@Path("holders")
 @ApplicationScoped
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class FruitResource {
+public class AccountHolderResource {
 
     @GET
-    public List<Fruit> get() {
-        return Fruit.listAll(Sort.by("name"));
+    public List<AccountHolder> get() {
+        return AccountHolder.listAll(Sort.by("name"));
     }
 
     @GET
     @Path("{id}")
-    public Fruit getSingle(@PathParam Long id) {
-        Fruit entity = Fruit.findById(id);
+    public AccountHolder getSingle(@PathParam Long id) {
+        AccountHolder entity = AccountHolder.findById(id);
         if (entity == null) {
-            throw new WebApplicationException("Fruit with id of " + id + " does not exist.", 404);
+            throw new WebApplicationException("Account holder with id of " + id + " does not exist.", 404);
         }
         return entity;
     }
 
     @POST
     @Transactional
-    public Response create(Fruit fruit) {
+    public Response create(AccountHolder fruit) {
         if (fruit.id != null) {
             throw new WebApplicationException("Id was invalidly set on request.", 422);
         }
@@ -57,18 +48,19 @@ public class FruitResource {
     @PUT
     @Path("{id}")
     @Transactional
-    public Fruit update(@PathParam Long id, Fruit fruit) {
+    public AccountHolder update(@PathParam Long id, AccountHolder fruit) {
         if (fruit.name == null) {
-            throw new WebApplicationException("Fruit Name was not set on request.", 422);
+            throw new WebApplicationException("Account holder Name was not set on request.", 422);
         }
 
-        Fruit entity = Fruit.findById(id);
+        AccountHolder entity = AccountHolder.findById(id);
 
         if (entity == null) {
-            throw new WebApplicationException("Fruit with id of " + id + " does not exist.", 404);
+            throw new WebApplicationException("Account holder with id of " + id + " does not exist.", 404);
         }
 
         entity.name = fruit.name;
+        entity.balance = fruit.balance;
 
         return entity;
     }
@@ -77,9 +69,9 @@ public class FruitResource {
     @Path("{id}")
     @Transactional
     public Response delete(@PathParam Long id) {
-        Fruit entity = Fruit.findById(id);
+        AccountHolder entity = AccountHolder.findById(id);
         if (entity == null) {
-            throw new WebApplicationException("Fruit with id of " + id + " does not exist.", 404);
+            throw new WebApplicationException("Account holder with id of " + id + " does not exist.", 404);
         }
         entity.delete();
         return Response.status(204).build();
