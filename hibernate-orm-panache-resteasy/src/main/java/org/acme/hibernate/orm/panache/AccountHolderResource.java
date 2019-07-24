@@ -36,20 +36,20 @@ public class AccountHolderResource {
 
     @POST
     @Transactional
-    public Response create(AccountHolder fruit) {
-        if (fruit.id != null) {
+    public Response create(AccountHolder accountHolder) {
+        if (accountHolder.id != null) {
             throw new WebApplicationException("Id was invalidly set on request.", 422);
         }
 
-        fruit.persist();
-        return Response.ok(fruit).status(201).build();
+        accountHolder.persist();
+        return Response.ok(accountHolder).status(201).build();
     }
 
     @PUT
     @Path("{id}")
     @Transactional
-    public AccountHolder update(@PathParam Long id, AccountHolder fruit) {
-        if (fruit.name == null) {
+    public AccountHolder update(@PathParam Long id, AccountHolder accountHolder) {
+        if (accountHolder.name == null) {
             throw new WebApplicationException("Account holder Name was not set on request.", 422);
         }
 
@@ -59,8 +59,8 @@ public class AccountHolderResource {
             throw new WebApplicationException("Account holder with id of " + id + " does not exist.", 404);
         }
 
-        entity.name = fruit.name;
-        entity.balance = fruit.balance;
+        entity.name = accountHolder.name;
+        entity.balance = accountHolder.balance;
 
         return entity;
     }

@@ -26,11 +26,15 @@ public class TransferController {
         }
 
         if(Objects.isNull(transfer.sum)){
-            throw new WebApplicationException("Sum is not specified", 404);
+            throw new WebApplicationException("Sum is not specified", 405);
+        }
+
+        if(Objects.equals(transfer.fromHolderId, transfer.toHolderId)){
+            throw new WebApplicationException("One and the same account", 405);
         }
 
         if(transfer.sum <= 0){
-            throw new WebApplicationException("Sum must be more than 0", 404);
+            throw new WebApplicationException("Sum must be more than 0", 405);
         }
         AccountHolder from = AccountHolder.findById(transfer.fromHolderId);
         AccountHolder to = AccountHolder.findById(transfer.toHolderId);
@@ -42,7 +46,7 @@ public class TransferController {
         from.balance -= transfer.sum;
         to.balance += transfer.sum;
 
-        return Response.ok(Arrays.asList(from, to)).status(201).build();
+        return Response.ok(Arrays.asList(from, to)).status(204).build();
     }
 
 }

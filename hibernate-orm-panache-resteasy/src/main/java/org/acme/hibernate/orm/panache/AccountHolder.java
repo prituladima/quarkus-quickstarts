@@ -21,4 +21,5 @@ public class AccountHolder  extends PanacheEntity {
         this.name = name;
         this.balance = balance;
     }
+
 }
